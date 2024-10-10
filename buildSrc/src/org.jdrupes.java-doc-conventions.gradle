@@ -4,3 +4,20 @@ plugins {
     
     id 'org.ajoberstar.git-publish'
 }
+
+task apidocs(type: Javadoc) {
+    enabled = JavaVersion.current() == JavaVersion.VERSION_23
+
+    inputs.file "${rootProject.rootDir}/misc/javadoc-overwrites.css"
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.compileClasspath
+    options.use = true
+    options.locale = "en_US"
+    options.JFlags = ["-Duser.language=en", "-Duser.country=US"]
+    options.links = ["https://docs.oracle.com/en/java/javase/21/docs/api/",
+        "https://jakarta.ee/specifications/jsonb/2.0/apidocs/",
+        "https://jakarta.ee/specifications/jsonp/2.1/apidocs/"]
+    options.addStringOption('-add-stylesheet',
+        "${rootProject.rootDir}/misc/javadoc-overwrites.css")
+    // options.addStringOption('locale', 'en_US')
+}

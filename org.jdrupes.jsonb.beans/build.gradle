@@ -6,6 +6,7 @@
 
 plugins {
     id 'org.jdrupes.java-library-conventions'
+    id 'org.jdrupes.java-doc-conventions'
 }
 
 dependencies {

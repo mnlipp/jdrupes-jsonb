@@ -34,6 +34,7 @@ import jakarta.json.bind.serializer.JsonbSerializer;
 import jakarta.json.bind.serializer.SerializationContext;
 import jakarta.json.stream.JsonGenerator;
 
+/// This is *markdown*
 public class JavaBeanSerializer implements JsonbSerializer<Object> {
 
     @SuppressWarnings({ "PMD.UseConcurrentHashMap",
