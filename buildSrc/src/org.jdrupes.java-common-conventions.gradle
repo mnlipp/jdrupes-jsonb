@@ -8,7 +8,7 @@ plugins {
     // Apply the common versioning conventions.
     // Put this at the start, because accessing project.version before
     // this is applied makes things fail.
-    // id 'org.jdrupes.versioning-conventions'
+    id 'org.jdrupes.versioning-conventions'
 
     // Apply the java Plugin to add support for Java.
     id 'java'

@@ -12,7 +12,8 @@ plugins {
     id 'java-library'
     
     // Add publishing information
-    id 'maven-publish'    
+    id 'maven-publish'
+    id 'signing'
     
     // Create OSGi info
     id 'biz.aQute.bnd.builder'

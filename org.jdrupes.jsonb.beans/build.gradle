@@ -16,12 +16,17 @@ dependencies {
 
 archivesBaseName = "jsonb-beans"
 
+// Derive bundle version and propagate to bnd
+def bundleVersion = isSnapshot
+    ? (version.substring(0, version.lastIndexOf("-SNAPSHOT")) + ".-\${tstamp}-SNAPSHOT")
+    : (version + ".rel")
+
 ext.bnd = [
     'Bundle-Name': 'JDrupes JSON-B Java Beans plugin',
     'Bundle-SymbolicName': 'org.jdrupes.jsonb.beans',
     'Bundle-Copyright': 'Michael N. Lipp (c) 2024',
     'Bundle-License': 'https://www.gnu.org/licenses/agpl-3.0.txt',
-    // Bundle-Version: ${bundleVersion}
+    'Bundle-Version': bundleVersion,
     '-sources': 'true',
     '-runee': 'JavaSE-21',
     'Export-Package': 'org.jdrupes.jsonb.beans'
