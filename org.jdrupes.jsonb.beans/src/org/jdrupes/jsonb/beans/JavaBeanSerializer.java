@@ -39,7 +39,7 @@ import java.util.Set;
 ///
 /// A serializer that treats all objects as JavaBeans. The JSON
 /// description of an object can have an additional key/value pair with
-/// key "class" and a class name. This class information is generated
+/// key "@class" and a class name. This class information is generated
 /// only if it is needed, i.e. if it cannot be derived from the containing
 /// object.
 /// 
@@ -117,7 +117,7 @@ import java.util.Set;
 ///             "number": "06751 51 56 57"
 ///         },
 ///         {
-///             "class": "test.json.SpecialNumber",
+///             "@class": "test.json.SpecialNumber",
 ///             "name": "Work",
 ///             "number": "030 77 35 44"
 ///         }
@@ -223,7 +223,7 @@ public class JavaBeanSerializer extends JavaBeanConverter
             .map(e -> e.type()).orElse(null);
         if (expectedType != null && !bean.getClass().equals(expectedType)
             && !omitClass) {
-            context.serialize("class", aliases.computeIfAbsent(
+            context.serialize("@class", aliases.computeIfAbsent(
                 bean.getClass(), k -> k.getName()), generator);
         }
         for (PropertyDescriptor propDesc : beanInfo
