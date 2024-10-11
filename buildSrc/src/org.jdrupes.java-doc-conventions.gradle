@@ -11,7 +11,11 @@ task apidocs(type: Javadoc) {
     inputs.file "${rootProject.rootDir}/misc/javadoc-overwrites.css"
     source = sourceSets.main.allJava
     classpath = sourceSets.main.compileClasspath
+    project.afterEvaluate {
+        title = project.bnd['Bundle-Name']
+    }
     options.use = true
+    options.linkSource = true
     options.locale = "en_US"
     options.JFlags = ["-Duser.language=en", "-Duser.country=US"]
     options.links = ["https://docs.oracle.com/en/java/javase/21/docs/api/",
@@ -19,5 +23,4 @@ task apidocs(type: Javadoc) {
         "https://jakarta.ee/specifications/jsonp/2.1/apidocs/"]
     options.addStringOption('-add-stylesheet',
         "${rootProject.rootDir}/misc/javadoc-overwrites.css")
-    // options.addStringOption('locale', 'en_US')
 }
