@@ -18,6 +18,7 @@
 
 package org.jdrupes.jsonb.beans;
 
+import jakarta.json.JsonValue;
 import jakarta.json.bind.annotation.JsonbAnnotation;
 import jakarta.json.bind.serializer.JsonbSerializer;
 import jakarta.json.bind.serializer.SerializationContext;
@@ -192,6 +193,8 @@ public class JavaBeanSerializer extends JsonBeanConverter
             || value instanceof Number
             || value.getClass().isArray()
             || value instanceof Collection<?>
+            || value instanceof Map<?, ?>
+            || value instanceof JsonValue
             || value.getClass().getAnnotation(JsonbAnnotation.class) != null
             || ignored.contains(value.getClass())) {
             context.serialize(value, generator);
