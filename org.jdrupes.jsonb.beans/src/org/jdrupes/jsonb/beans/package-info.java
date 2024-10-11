@@ -16,4 +16,5 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/// Converters for handling JavaBeans in Json-B.
 package org.jdrupes.jsonb.beans;

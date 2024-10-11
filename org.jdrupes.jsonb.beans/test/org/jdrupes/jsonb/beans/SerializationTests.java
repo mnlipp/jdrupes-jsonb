@@ -18,34 +18,14 @@
 
 package org.jdrupes.jsonb.beans;
 
-import java.lang.management.ManagementFactory;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
-import javax.management.InstanceNotFoundException;
-import javax.management.IntrospectionException;
-import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
-import javax.management.ObjectName;
-import javax.management.ReflectionException;
-import static org.junit.jupiter.api.Assertions.fail;
+import jakarta.json.bind.annotation.JsonbAnnotation;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-class BasicTests {
-
-//    @Test
-//    void test() throws MalformedObjectNameException, InstanceNotFoundException,
-//            IntrospectionException, ReflectionException {
-//        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-//        var mbeanName = new ObjectName("java.lang"
-//            + ":type=GarbageCollector,name=G1 Concurrent GC");
-//        var object = mbs.getObjectInstance(mbeanName);
-//
-////        ObjectMapper mapper = new ObjectMapper();
-////        mapper.registerModule(new JmxModule(mbs));
-////        String json = mapper.writeValueAsString(object);
-////        System.out.println(json);
-//    }
+class SerializationTests {
 
     public static class Person {
 
@@ -112,11 +92,29 @@ class BasicTests {
 
     }
 
+    @JsonbAnnotation
+    public static class SpecialNumber2 extends PhoneNumber {
+
+        public SpecialNumber2(String name, String number) {
+            super(name, number);
+        }
+    }
+
+    public static class SpecialNumber3 extends PhoneNumber {
+
+        public SpecialNumber3(String name, String number) {
+            super(name, number);
+        }
+    }
+
     @Test
     void test() {
         // Create custom configuration
         JsonbConfig config = new JsonbConfig()
-            .withSerializers(new JavaBeanSerializer())
+            .withSerializers(
+                new JavaBeanSerializer()
+                    .addAlias(SpecialNumber.class, "SpecialNumber")
+                    .addIgnored(SpecialNumber3.class))
             .withFormatting(true);
         Jsonb jsonb = JsonbBuilder.create(config);
 
@@ -125,11 +123,37 @@ class BasicTests {
         person.setAge(42);
         person.setNumbers(
             new PhoneNumber[] { new PhoneNumber("Mobile", "123"),
-                new SpecialNumber("Emergency", "456") });
+                new SpecialNumber("Emergency", "911"),
+                new SpecialNumber2("Ordinary", "456"),
+                new SpecialNumber2("Also Ordinary", "456") });
 
         String result = jsonb.toJson(person);
-
-        System.out.println(result);
+        String expected
+            = """
+                    {
+                      "age":42,
+                      "name":"Tom Test",
+                      "numbers":[
+                        {
+                          "name":"Mobile",
+                          "number":"123"
+                        },
+                        {
+                          "class":"SpecialNumber",
+                          "name":"Emergency",
+                          "number":"911"
+                        },
+                        {
+                          "name":"Ordinary",
+                          "number":"456"
+                        },
+                        {
+                          "name":"Also Ordinary",
+                          "number":"456"
+                        }
+                      ]
+                    }""";
+        assertEquals(expected, result);
     }
 
 }
