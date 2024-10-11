@@ -132,7 +132,7 @@ import java.util.Set;
 /// classes from bing handled by this serializer by either annotating them
 /// with {@link JsonbAnnotation} or 
 ///
-public class JavaBeanSerializer extends JsonBeanConverter
+public class JavaBeanSerializer extends JavaBeanConverter
         implements JsonbSerializer<Object> {
 
     private static record Expected(Object[] values, Class<?> type) {

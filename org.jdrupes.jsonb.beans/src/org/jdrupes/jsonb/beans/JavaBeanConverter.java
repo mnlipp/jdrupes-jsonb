@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /// Common base class for the JavaBean serializer and deserializer.
-public class JsonBeanConverter {
+public class JavaBeanConverter {
 
     @SuppressWarnings({ "PMD.UseConcurrentHashMap",
         "PMD.FieldNamingConventions", "PMD.VariableNamingConventions" })
@@ -72,7 +72,7 @@ public class JsonBeanConverter {
     }
 
     /// Create a new instance.
-    public JsonBeanConverter() {
+    public JavaBeanConverter() {
         // Can be instantiated.
     }
 }
