@@ -13,3 +13,4 @@ plugins {
 
 rootProject.name = 'org.jdrupes.jsonb'
 include('org.jdrupes.jsonb.beans')
+include('org.jdrupes.jsonb.jmx')
