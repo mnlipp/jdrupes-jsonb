@@ -139,7 +139,7 @@ class SerializationTests {
                           "number":"123"
                         },
                         {
-                          "class":"SpecialNumber",
+                          "@class":"SpecialNumber",
                           "name":"Emergency",
                           "number":"911"
                         },

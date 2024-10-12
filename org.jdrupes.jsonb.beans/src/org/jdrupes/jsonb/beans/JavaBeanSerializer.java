@@ -107,7 +107,7 @@ import java.util.Set;
 /// 
 /// A serialization result may look like this:
 /// 
-/// ```json
+/// ```jsonSample1
 /// {
 ///     "age": 42,
 ///     "name": "Simon Sample",
