@@ -70,6 +70,10 @@ publishing {
     }
 }
 
+signing {
+    sign publishing.publications.maven
+}
+
 jar {
     afterEvaluate {
         into("META-INF/maven/$project.group/${base.archivesName.get()}") {
