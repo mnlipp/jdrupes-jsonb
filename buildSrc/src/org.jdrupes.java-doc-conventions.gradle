@@ -10,7 +10,7 @@ task apidocs(type: Javadoc) {
     source = sourceSets.main.allJava
     classpath = sourceSets.main.compileClasspath
     project.afterEvaluate {
-        title = project.bnd['Bundle-Name']
+        title = tasks.jar.manifest.attributes["Bundle-License"]
     }
     options.use = true
     options.linkSource = true

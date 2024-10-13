@@ -46,10 +46,12 @@ publishing {
             project.afterEvaluate {
                 pub.setArtifactId(base.archivesName.get())
                 pom {
-                    name = project.bnd['Bundle-Name']
+                    name = tasks.jar.manifest.attributes['Bundle-Name']
+                    description = tasks.jar.manifest.attributes['Bundle-Description']
+                    url = tasks.jar.manifest.attributes['Bundle-DocURL']
                     licenses {
                         license {
-                            url = project.bnd['Bundle-License']
+                            url = tasks.jar.manifest.attributes['Bundle-License']
                         }
                     }
                     developers {
