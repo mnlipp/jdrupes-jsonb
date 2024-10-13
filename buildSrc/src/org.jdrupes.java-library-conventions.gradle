@@ -22,11 +22,11 @@ plugins {
 publishing {
     publications {
         maven(MavenPublication) {
-            artifactId archivesBaseName        
-        
+            def pub = it
             from components.java
   
-            project.afterEvaluate {  
+            project.afterEvaluate {
+                pub.setArtifactId(base.archivesName.get())
                 pom {
                     name = project.bnd['Bundle-Name']
                     licenses {
