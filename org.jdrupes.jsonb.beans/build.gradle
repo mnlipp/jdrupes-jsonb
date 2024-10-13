@@ -15,6 +15,10 @@ dependencies {
     testImplementation 'org.apache.johnzon:johnzon-jsonb:2.0.1'
 }
 
+// // See https://discuss.gradle.org/t/how-to-access-the-properties-of-the-base-extension/49619
+// base {
+//     archivesName = "jsonb-beans"
+// }
 archivesBaseName = "jsonb-beans"
 
 // Derive bundle version and propagate to bnd

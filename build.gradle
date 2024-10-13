@@ -7,13 +7,60 @@ buildscript {
 plugins {
     id 'biz.aQute.bnd.builder' version "7.0.0"
     id 'org.ajoberstar.grgit' version '5.2.0' apply false
-    id 'org.ajoberstar.git-publish' version '4.2.0' apply false
     id 'pl.allegro.tech.build.axion-release' version '1.17.2' apply false
+    id 'org.ajoberstar.git-publish' version '4.2.0'
     id 'eclipse'
 }
 
 allprojects {
     project.group = 'org.jdrupes'
+}
+
+// Prepare github authentication for plugins
+if (System.properties['org.ajoberstar.grgit.auth.username'] == null) {
+    System.setProperty('org.ajoberstar.grgit.auth.username',
+        project.rootProject.properties['website.push.token'] ?: "nouser")
+}
+
+evaluationDependsOn(":org.jdrupes.jsonb.beans")
+evaluationDependsOn(":org.jdrupes.jsonb.jmx")
+
+gitPublish {
+    repoUri = 'https://github.com/mnlipp/jdrupes.org.git'
+    branch = 'main'
+    contents {
+        // from("${rootProject.projectDir}/webpages") {
+        //     include '_layouts/vm-operator.html'
+        //     include 'vm-operator/**'
+        // }
+        from("${project(':org.jdrupes.jsonb.beans').buildDir}/docs/javadoc") {
+            into 'jdrupes-jsonb-beans/javadoc'
+        }
+        if(!project(':org.jdrupes.jsonb.beans').isSnapshot) {
+            from("${project(':org.jdrupes.jsonb.beans').buildDir}/docs/javadoc") {
+                into 'jdrupes-jsonb-beans/latest-release/javadoc'
+            }
+        }
+        from("${project(':org.jdrupes.jsonb.jmx').buildDir}/docs/javadoc") {
+            into 'jdrupes-jsonb-jmx/javadoc'
+        }
+        if(!project(':org.jdrupes.jsonb.jmx').isSnapshot) {
+            from("${project(':org.jdrupes.jsonb.jmx').buildDir}/docs/javadoc") {
+                into 'jdrupes-jsonb-jmx/latest-release/javadoc'
+            }
+        }
+    }
+    preserve { include '**/*' }
+    commitMessage = "Updated."
+}
+
+gradle.projectsEvaluated {
+    tasks.gitPublishReset.mustRunAfter subprojects.tasks
+        .collect { tc -> tc.findByName("build") }.flatten()
+    tasks.gitPublishReset.mustRunAfter subprojects.tasks
+        .collect { tc -> tc.findByName("test") }.flatten()
+    tasks.gitPublishCopy.dependsOn subprojects.tasks
+        .collect { tc -> tc.findByName("apidocs") }.flatten()
 }
 
 task stage {
@@ -26,10 +73,10 @@ task stage {
             tc -> tc.findByName("build") }.flatten()
     }
     
-//    if (JavaVersion.current() == JavaVersion.VERSION_21) {
-//        // Publish JavaDoc
+    if (JavaVersion.current() == JavaVersion.VERSION_23) {
+        // Publish JavaDoc
 //        dependsOn gitPublishPush
-//    }
+    }
 }
 
 eclipse {
