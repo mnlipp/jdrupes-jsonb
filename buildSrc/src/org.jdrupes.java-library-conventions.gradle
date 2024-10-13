@@ -8,6 +8,9 @@ plugins {
     // Apply the common convention plugin for shared build configuration between library and application projects.
     id 'org.jdrupes.java-common-conventions'
 
+    // Apply the common convention plugin for shared build configuration between library and application projects.
+    id 'org.jdrupes.java-doc-conventions'
+
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
     
@@ -19,11 +22,26 @@ plugins {
     id 'biz.aQute.bnd.builder'
 }
 
+// Additional jars for publishing
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = "sources"
+}
+
+task javadocJar(type: Jar) {
+    dependsOn "apidocs"
+    from apidocs.destinationDir
+    archiveClassifier = "javadoc"
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
             def pub = it
             from components.java
+            artifact sourcesJar            
+            artifact javadocJar            
   
             project.afterEvaluate {
                 pub.setArtifactId(base.archivesName.get())
@@ -48,6 +66,15 @@ publishing {
                     }
                 }
             }
+        }
+    }
+}
+
+jar {
+    afterEvaluate {
+        into("META-INF/maven/$project.group/${base.archivesName.get()}") {
+            from { generatePomFileForMavenPublication }
+            rename ".*", "pom.xml"
         }
     }
 }
